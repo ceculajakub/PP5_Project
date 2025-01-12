@@ -1,0 +1,53 @@
+<div class="grid grid-cols-2 gap-3">
+  <div>
+    <app-playlists-list
+      [items]="store.playlists()"
+      [selectedId]="store.selectedId()"
+      (selectedIdChange)="store.selectPlaylistById($event)"
+    />
+    <button *ngIf="store.mode() !== 'creator'" mat-fab class="float-right">
+      <!-- (click)="store.store.mode.set = 'creator'" -->
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <div class="grid gap-5">
+    <!-- @if (selected) { -->
+    @switch (store.mode()) {
+      @default {
+        <app-playlists-details
+          [playlist]="store.selected()"
+          (edit)="store.showEditor()"
+        />
+      }
+      @case ("editor") {
+        <app-playlists-editor
+          [playlist]="store.selected()"
+          (cancel)="store.showDetails()"
+          (save)="store.savePlaylist($event)"
+        />
+      }
+      @case ("creator") {
+        <app-playlists-editor
+          (cancel)="store.showDetails()"
+          (save)="store.createPlaylist($event)"
+        />
+      }
+    }
+    <!-- } -->
+  </div>
+</div>
+
+<!-- <ng-container [ngSwitch]="mode">
+  <app-playlists-details
+    *ngSwitchDefault
+    [playlist]="selected"
+    (edit)="store.showEditor()"
+  />
+
+  <app-playlists-editor
+    *ngSwitchCase="'editor'"
+    [playlist]="selected"
+    (cancel)="store.showDetails()"
+    (save)="store.savePlaylist($event)"
+  />
+</ng-container> -->

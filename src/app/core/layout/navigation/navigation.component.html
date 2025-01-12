@@ -1,0 +1,36 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <ng-content select="sidebar"></ng-content>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      @if (isHandset$ | async)
+      {
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      }
+      <div class="flex w-full justify-between">
+        <ng-content select="toolbar"></ng-content>
+      </div>
+    </mat-toolbar>
+    <div class="min-h-full flex flex-col">
+      <div class="flex-1">
+        <ng-content>teststes</ng-content>
+      </div>
+      <ng-content select="footer">
+        <div class="w-full text-center">Śpiewające Fortepiany - Twoje źródło muzycznych inspiracji. 🎵
+          © 2024 Wszystkie prawa zastrzeżone</div>
+      </ng-content>
+  </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
