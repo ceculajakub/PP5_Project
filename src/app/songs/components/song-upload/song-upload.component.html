@@ -1,0 +1,46 @@
+<div class="song-upload">
+    <h2>Upload a Song</h2>
+    <form (ngSubmit)="onUpload()" enctype="multipart/form-data">
+      <div>
+        <label for="songFile">Choose Song File:</label>
+        <input
+          type="file"
+          id="songFile"
+          name="songFile"
+          (change)="onFileSelected($event)"
+          required
+        />
+      </div>
+  
+      <div>
+        <label for="songTitle">Song Title:</label>
+        <input
+          type="text"
+          id="songTitle"
+          name="songTitle"
+          [(ngModel)]="songTitle"
+          placeholder="Enter song title"
+          required
+        />
+      </div>
+  
+      <div>
+        <label for="songArtist">Artist Name:</label>
+        <input
+          type="text"
+          id="songArtist"
+          name="songArtist"
+          [(ngModel)]="songArtist"
+          placeholder="Enter artist name"
+          required
+        />
+      </div>
+  
+      <button type="submit">Upload Song</button>
+    </form>
+  
+    <div >
+      <p>Uploading...</p>
+    </div>
+  </div>
+  

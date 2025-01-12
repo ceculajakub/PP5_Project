@@ -1,0 +1,30 @@
+<div class="song-search">
+    <h2>Search Songs</h2>
+    <form (ngSubmit)="onSearch()">
+      <label for="searchTerm">Search for a song:</label>
+      <input
+        type="text"
+        id="searchTerm"
+        name="searchTerm"
+        [(ngModel)]="searchTerm"
+        placeholder="Enter song name or artist"
+        required
+      />
+      <button type="submit">Search</button>
+    </form>
+  
+    <div class="search-results" *ngIf="songs && songs.length">
+      <h3>Search Results</h3>
+      <ul>
+        <li *ngFor="let song of songs">
+          {{ song.name }} by {{ song.artist }}
+          <button (click)="addToPlaylist(song)">Add to Playlist</button>
+        </li>
+      </ul>
+    </div>
+  
+    <div class="no-results" *ngIf="songs && !songs.length">
+      <p>No songs found. Try another search.</p>
+    </div>
+  </div>
+  

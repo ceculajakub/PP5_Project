@@ -1,0 +1,16 @@
+<div class="song-list">
+    <h2>Song List</h2>
+    <div *ngIf="songs && songs.length">
+      <ul>
+        <li *ngFor="let song of songs">
+          <span>{{ song.name }} by {{ song.artist }}</span>
+          <button (click)="removeFromPlaylist(song)">Remove</button>
+        </li>
+      </ul>
+    </div>
+  
+    <div *ngIf="!songs || !songs.length">
+      <p>No songs to display. Add some songs to your playlist!</p>
+    </div>
+  </div>
+  
