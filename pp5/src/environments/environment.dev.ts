@@ -7,6 +7,7 @@ export const environment = {
       'playlist-modify-public',
       'playlist-modify-private',
       'user-read-private',
+      'playlist-read-private',
     ],
   },
 };

@@ -1,11 +1,13 @@
 /* filepath: /C:/uczelnia/PP5/pp5/src/app/libs/client/home/home.component.scss */
 .home-container {
   font-family: Arial, sans-serif;
-  color: #333;
-  background-color: #f5f5f5;
+  color: #f5f5f5;
+  background-color: #333;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  margin: 0 auto
 }
 
 .header {
@@ -27,6 +29,8 @@
 .playlist-actions > button:not(:last-child) {
     margin-right: 10px;
 }
+
+
 
 button {
   background-color: #1db954;
@@ -56,10 +60,78 @@ button:hover {
       align-items: center;
       justify-content: space-between;
       padding: 10px;
-      background-color: white;
+      background-color: #6d6d6d;
       border-radius: 4px;
       margin-bottom: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
+}
+
+.confirmation-box {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 10;
+  margin-bottom: 5px;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+.confirmation-box p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.remove-confirmation-button {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.remove-cancel-button {
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+.add-playlist-form {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #333;
+}
+
+.add-playlist-form h3 {
+  margin-top: 0;
+}
+
+.add-playlist-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.add-playlist-form input,
+.add-playlist-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.add-playlist-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.add-playlist-form button {
+  padding: 8px 12px;
 }

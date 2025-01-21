@@ -22,12 +22,12 @@ export const PlaylistStore = signalStore(
     setPlaylists: (playlists: []) => {
       patchState(store, { playlists });
     },
-    addPlaylist: (playlist: Playlist) => {
+    addPlaylist: (newPlaylist: Playlist) => {
       patchState(store, {
-        playlists: [...store.playlists(), playlist],
+        playlists: [...store.playlists(), newPlaylist],
       });
     },
-    modifyPlaylist: (updatedPlaylist: any) => {
+    modifyPlaylist: (updatedPlaylist: Playlist) => {
       patchState(store, {
         playlists: store.playlists().map((playlist) =>
           playlist.id === updatedPlaylist.id ? updatedPlaylist : playlist

@@ -51,7 +51,24 @@ export class SpotifyService {
     } as CreatePlaylistRequest);
   }
 
-  getPlaylists(): Observable<any> {
+  getPlaylists(): any {
     return from(this.api.getUserPlaylists());
+    // console.log(this.http.get(`https://api.spotify.com/v1/playlists/`, {
+    //   headers: {
+    //     Authorization: `Bearer ${this.getAccessToken()}`,
+    //   },
+    // }));
+    // return this.api.getUserPlaylists()
+    //   .then(data => {
+    //     console.log('Raw Playlist Response:', JSON.stringify(data, null, 2));
+    //     return data
+    //   })
+    //   .catch(error => {
+    //     if (error.response) {
+    //       // If using axios or similar tools, inspect raw response
+    //       console.error('Raw Error Response:', error.response);
+    //     }
+    //     console.error('Error Details:', error);
+    //   });
   }
 }
