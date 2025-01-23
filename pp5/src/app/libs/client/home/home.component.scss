@@ -64,8 +64,16 @@ button:hover {
       border-radius: 4px;
       margin-bottom: 10px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      img {
+        width: 150px;
+        height: 150px;
+      }
     }
   }
+}
+
+.playlists-container li:hover {
+  cursor: pointer;
 }
 
 .confirmation-box {
@@ -134,4 +142,22 @@ button:hover {
 
 .add-playlist-form button {
   padding: 8px 12px;
+}
+
+.back-to-playlists-btn {
+  margin-bottom: 1.2em;
+  width: 100px;
+  font-size: 0.9rem!important;
+  position:sticky;
+  top: 20px; 
+  left: 0;
+  right: 0;
+  z-index: 100; 
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }

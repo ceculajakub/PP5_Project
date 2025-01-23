@@ -10,41 +10,52 @@
     }
   </header>
   <main class="main-content">
-    <h2>Your Playlists</h2>
-    <ul>
-      <li *ngFor="let playlist of userPlaylists()">
-        {{ playlist.name }}
-        <div class="playlist-actions">
-          <button (click)="modifyPlaylist(playlist)">Modify</button>
-          <div class="remove-confirmation-box" *ngIf="confirmingRemove === playlist.id">
-            <p>Are you sure?</p>
-            <button class="remove-confirmation-button" (click)="removePlaylist(playlist)">Yes</button>
-            <button class="remove-cancel-button" (click)="cancelRemove()">No</button>
+    <div *ngIf="!selectedPlaylist" class="playlists-container">
+      <h2>Your Playlists</h2>
+      <ul>
+        <li *ngFor="let playlist of userPlaylists()" (click)="viewTracklist(playlist)">
+          <img [src]="playlist.images[0].url"/>
+          {{ playlist.name }}
+          <div class="playlist-actions">
+            <button (click)="modifyPlaylist(playlist)">Modify</button>
+            <div class="remove-confirmation-box" *ngIf="confirmingRemove === playlist.id">
+              <p>Are you sure?</p>
+              <button class="remove-confirmation-button" (click)="removePlaylist(playlist)">Yes</button>
+              <button class="remove-cancel-button" (click)="cancelRemove()">No</button>
+            </div>
+            <button *ngIf="confirmingRemove !== playlist.id" (click)="askRemoveConfirmation(playlist)">Remove</button>
           </div>
-          <button *ngIf="confirmingRemove !== playlist.id" (click)="askRemoveConfirmation(playlist)">Remove</button>
-        </div>
 
-      </li>
-    </ul>
+        </li>
+      </ul>
 
-  <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()">Add Playlist</button>
+      <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()">Add Playlist</button>
 
-  <div *ngIf="isAddingPlaylist" class="add-playlist-form">
-    <h3>Add New Playlist</h3>
-    <form (ngSubmit)="addPlaylist()">
-      <label>
-        Title:
-        <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
-      </label>
-      <label>
-        Description:
-        <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
-      </label>
-      <div class="form-actions">
-        <button type="submit">Add</button>
-        <button type="button" (click)="cancelAddPlaylist()">Cancel</button>
+      <div *ngIf="isAddingPlaylist" class="add-playlist-form">
+        <h3>Add New Playlist</h3>
+        <form (ngSubmit)="addPlaylist()">
+          <label>
+            Title:
+            <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
+          </label>
+          <label>
+            Description:
+            <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
+          </label>
+          <div class="form-actions">
+            <button type="submit">Add</button>
+            <button type="button" (click)="cancelAddPlaylist()">Cancel</button>
+          </div>
+        </form>
       </div>
-    </form>
-  </div>
+    </div>
+    
+    <div>
+      <button class="back-to-playlists-btn" *ngIf="selectedPlaylist" (click)="goBackToPlaylists()">Back</button>
+      <app-display-tracks
+        *ngIf="selectedPlaylist"
+        [playlist]="selectedPlaylist">
+      </app-display-tracks>
+    </div>
   </main>
 </div>

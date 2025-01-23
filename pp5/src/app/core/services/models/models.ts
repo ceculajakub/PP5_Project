@@ -20,7 +20,7 @@ export interface Playlist {
   };
   tracks: {
     total: number;
-    items: Track[];
+    href: string;
   };
   external_urls: {
     spotify: string;
@@ -35,6 +35,9 @@ export interface Track {
     images: {
       url: string;
     }[];
+    external_urls: {
+      spotify: string;
+    }
   };
   artists: {
     name: string;

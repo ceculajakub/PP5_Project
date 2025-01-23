@@ -1,6 +1,6 @@
 import { Inject, inject } from '@angular/core';
 import { signalStore, withMethods, withState, patchState } from '@ngrx/signals';
-import { Playlist } from '../../../core/services/models/models';
+import { Playlist, Track } from '../../../core/services/models/models';
 import { tap, exhaustMap, pipe } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -8,11 +8,14 @@ import { SpotifyService } from '../../../core/services/spotify.service';
 
 export interface State {
     playlists: Playlist[];
+    tracks: Track[];
     fetchStatus: 'idle' | 'pending' | 'success' | 'failed';
+    
 }
 
 export const initialState: State = {
   playlists: [],
+  tracks: [],
   fetchStatus: 'idle'
 };
 
@@ -60,5 +63,29 @@ export const PlaylistStore = signalStore(
         )
       )
     ),
+    fetchTracks: rxMethod<string>(
+      pipe(
+        tap(() => patchState(store, { fetchStatus: 'pending' })), 
+        exhaustMap((playlistId: string) =>
+          service.getTracks(playlistId).pipe(
+            tapResponse({
+              next: (response: any) => {
+                const tracks = response.items.map((item: any) => (item.track));
+    
+                patchState(store, {
+                  tracks: tracks, 
+                  fetchStatus: 'success', 
+                });
+    
+                console.log(`Tracks downloaded for playlist: ${playlistId}`);
+              },
+              error: () => {
+                patchState(store, { fetchStatus: 'failed' }); 
+              },
+            })
+          )
+        )
+      )
+    )
   }))
 );

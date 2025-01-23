@@ -1,0 +1,16 @@
+<div class="tracks-container" *ngIf="playlist">
+    <h2>{{ playlist.name }}</h2>
+    <p>{{ playlist.description }}</p>
+    <p><strong>Owner:</strong> {{ playlist.owner.display_name }}</p>
+  
+    <ul *ngIf="playlistTracks().length > 0; else noTracks">
+      <li *ngFor="let track of playlistTracks()">
+        <a [href]="track.album.external_urls.spotify" target="_blank"><img [src]="track.album.images[0].url"></a>
+        <p><strong>{{ track.name }}</strong> by {{ getArtistsNames(track) }}</p>
+        <a [href]="track.external_urls.spotify" target="_blank">▶</a>
+      </li>
+    </ul>
+    <ng-template #noTracks>
+      <p>No tracks available for this playlist.</p>
+    </ng-template>
+</div>

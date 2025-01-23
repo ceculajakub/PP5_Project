@@ -35,6 +35,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'display-tracks',
+    loadComponent: () =>
+      import('./libs/client/playlist/display-tracks/display-tracks.component').then(
+        (c) => c.DisplayTracksComponent
+      ),
+  },
+  {
     path: 'remove-tracks',
     loadComponent: () =>
       import(

@@ -2,13 +2,14 @@ import { Component, NgModule, OnInit, computed, inject, signal } from '@angular/
 import { NgFor, NgIf } from '@angular/common';
 import { SpotifyService } from '../../../core/services/spotify.service';
 import { PlaylistStore } from './playlist.store';
-import { Playlist } from '../../../core/services/models/models';
+import { Playlist, Track } from '../../../core/services/models/models';
 import { FormsModule } from '@angular/forms';
+import { DisplayTracksComponent } from "../playlist/display-tracks/display-tracks.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule],
+  imports: [NgFor, NgIf, FormsModule, DisplayTracksComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [PlaylistStore],
@@ -22,7 +23,7 @@ export class HomeComponent implements OnInit {
   isAddingPlaylist = false; 
   newPlaylistTitle = ''; 
   newPlaylistDescription = '';
-
+  selectedPlaylist: Playlist | null = null;
 
   ngOnInit(): void {
     this.userLoggedIn.set(this.spotifyService.isLoggedIn());
@@ -68,7 +69,7 @@ export class HomeComponent implements OnInit {
         },
         tracks: {
           total: 0,
-          items: [], // Empty track list for new playlists
+          href: '', // Empty track list for new playlists
         },
         external_urls: {
           spotify: '', // Empty Spotify URL for new playlists
@@ -98,6 +99,15 @@ export class HomeComponent implements OnInit {
   removePlaylist(playlist: any): void {
     this.playlistStore.removePlaylist(playlist.id);
     this.confirmingRemove = null;
+  }
+
+  viewTracklist(playlist: Playlist): void {
+    this.selectedPlaylist = playlist;
+  }
+
+  goBackToPlaylists(): void {
+    this.selectedPlaylist = null;
+    window.scrollTo(0, 0)
   }
 
 }
