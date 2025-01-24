@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 80px;
 }
 
 .logo {
@@ -97,6 +97,7 @@ button:hover {
 .remove-confirmation-button {
   padding: 5px 10px;
   font-size: 12px;
+  margin-right: 8px;
 }
 
 .remove-cancel-button {

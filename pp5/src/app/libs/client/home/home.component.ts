@@ -1,7 +1,7 @@
 import { Component, NgModule, OnInit, computed, inject, signal } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { SpotifyService } from '../../../core/services/spotify.service';
-import { PlaylistStore } from './playlist.store';
+import { PlaylistStore } from '../playlist.store';
 import { Playlist, Track } from '../../../core/services/models/models';
 import { FormsModule } from '@angular/forms';
 import { DisplayTracksComponent } from "../playlist/display-tracks/display-tracks.component";
@@ -56,23 +56,23 @@ export class HomeComponent implements OnInit {
   addPlaylist(): void {
     if (this.newPlaylistTitle.trim() && this.newPlaylistDescription.trim()) {
       const newPlaylist: Playlist = {
-        id: Date.now().toString(), // Unique ID using timestamp
+        id: Date.now().toString(), 
         name: this.newPlaylistTitle.trim(),
         description: this.newPlaylistDescription.trim(),
         images: [
           {
-            url: 'https://via.placeholder.com/150', // Placeholder image
+            url: 'https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjExMjQtMDQta3kzc2s5bXUuanBn.jpg',
           },
         ],
         owner: {
-          display_name: 'You', // Default to the current user
+          display_name: 'You',
         },
         tracks: {
           total: 0,
-          href: '', // Empty track list for new playlists
+          href: '',
         },
         external_urls: {
-          spotify: '', // Empty Spotify URL for new playlists
+          spotify: '',
         },
       };
       this.playlistStore.addPlaylist(newPlaylist);

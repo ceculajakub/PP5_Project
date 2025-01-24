@@ -2,7 +2,7 @@ import { Component, computed, inject, Input, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { Playlist, Track } from '../../../../core/services/models/models';
 import { HttpClient } from '@angular/common/http';
-import { PlaylistStore } from '../../home/playlist.store';
+import { PlaylistStore } from '../../playlist.store';
 
 @Component({
   selector: 'app-display-tracks',

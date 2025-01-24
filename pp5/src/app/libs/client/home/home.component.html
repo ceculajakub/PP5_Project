@@ -10,52 +10,62 @@
     }
   </header>
   <main class="main-content">
-    <div *ngIf="!selectedPlaylist" class="playlists-container">
-      <h2>Your Playlists</h2>
-      <ul>
-        <li *ngFor="let playlist of userPlaylists()" (click)="viewTracklist(playlist)">
-          <img [src]="playlist.images[0].url"/>
-          {{ playlist.name }}
-          <div class="playlist-actions">
-            <button (click)="modifyPlaylist(playlist)">Modify</button>
-            <div class="remove-confirmation-box" *ngIf="confirmingRemove === playlist.id">
-              <p>Are you sure?</p>
-              <button class="remove-confirmation-button" (click)="removePlaylist(playlist)">Yes</button>
-              <button class="remove-cancel-button" (click)="cancelRemove()">No</button>
+    @if (!selectedPlaylist) {
+      <div class="playlists-container">
+        <h2>Your Playlists</h2>
+        <ul>
+          <li *ngFor="let playlist of userPlaylists()" (click)="viewTracklist(playlist)">
+            @if(playlist.images){
+              <img [src]="playlist.images[0].url"/>
+            }
+            @else {
+              <img src="https://plus.unsplash.com/premium_vector-1683141234968-b4f861c0546a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Playlist Image" />
+            }
+            <h3>{{ playlist.name }}</h3>
+            <div class="playlist-actions">
+              <button (click)="modifyPlaylist(playlist)">Modify</button>
+              @if (confirmingRemove === playlist.id) {
+                <div class="remove-confirmation-box">
+                  <p>Are you sure?</p>
+                  <button class="remove-confirmation-button" (click)="removePlaylist(playlist)">Yes</button>
+                  <button class="remove-cancel-button" (click)="cancelRemove()">No</button>
+                </div>
+              }
+              @else {
+                <button (click)="askRemoveConfirmation(playlist)">Remove</button>
+              }
             </div>
-            <button *ngIf="confirmingRemove !== playlist.id" (click)="askRemoveConfirmation(playlist)">Remove</button>
+          </li>
+        </ul>
+        @if (!isAddingPlaylist) {
+          <button (click)="showAddPlaylistForm()">Add Playlist</button>
+        }
+        @else {
+          <div class="add-playlist-form">
+            <h3>Add New Playlist</h3>
+            <form (ngSubmit)="addPlaylist()">
+              <label>
+                Title:
+                <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
+              </label>
+              <label>
+                Description:
+                <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
+              </label>
+              <div class="form-actions">
+                <button type="submit">Add</button>
+                <button type="button" (click)="cancelAddPlaylist()">Cancel</button>
+              </div>
+            </form>
           </div>
-
-        </li>
-      </ul>
-
-      <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()">Add Playlist</button>
-
-      <div *ngIf="isAddingPlaylist" class="add-playlist-form">
-        <h3>Add New Playlist</h3>
-        <form (ngSubmit)="addPlaylist()">
-          <label>
-            Title:
-            <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
-          </label>
-          <label>
-            Description:
-            <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
-          </label>
-          <div class="form-actions">
-            <button type="submit">Add</button>
-            <button type="button" (click)="cancelAddPlaylist()">Cancel</button>
-          </div>
-        </form>
+        }
       </div>
-    </div>
-    
-    <div>
-      <button class="back-to-playlists-btn" *ngIf="selectedPlaylist" (click)="goBackToPlaylists()">Back</button>
-      <app-display-tracks
-        *ngIf="selectedPlaylist"
-        [playlist]="selectedPlaylist">
-      </app-display-tracks>
-    </div>
+    }
+    @if (selectedPlaylist) {
+      <div>
+        <button class="back-to-playlists-btn" (click)="goBackToPlaylists()">Back</button>
+        <app-display-tracks [playlist]="selectedPlaylist"></app-display-tracks>
+      </div>
+    }
   </main>
 </div>
