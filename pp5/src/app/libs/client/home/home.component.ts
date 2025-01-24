@@ -9,12 +9,12 @@ import { DisplayTracksComponent } from "../playlist/display-tracks/display-track
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, DisplayTracksComponent],
+  imports: [NgFor, FormsModule, DisplayTracksComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [PlaylistStore],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   userLoggedIn = signal<boolean>(false);
   private spotifyService = inject(SpotifyService);
   private playlistStore = inject(PlaylistStore);
@@ -25,13 +25,20 @@ export class HomeComponent implements OnInit {
   newPlaylistDescription = '';
   selectedPlaylist: Playlist | null = null;
 
-  ngOnInit(): void {
+  constructor()
+  {
     this.userLoggedIn.set(this.spotifyService.isLoggedIn());
 
-    if (this.userLoggedIn()) {
       this.playlistStore.fetchPlaylists();
-    }
   }
+
+  // ngOnInit(): void {
+  //   this.userLoggedIn.set(this.spotifyService.isLoggedIn());
+
+  //   if (this.userLoggedIn()) {
+  //     this.playlistStore.fetchPlaylists();
+  //   }
+  // }
 
   login(): void {
     const authUrl = this.spotifyService.getAuthUrl();

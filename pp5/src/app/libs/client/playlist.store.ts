@@ -42,6 +42,9 @@ export const PlaylistStore = signalStore(
         playlists: store.playlists().filter((playlist) => playlist.id !== playlistId),
       });
     },
+    clearTracks: () => {
+      patchState(store, { tracks: [] });
+    },
     fetchPlaylists: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { fetchStatus: 'pending' })),
