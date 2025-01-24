@@ -1,7 +1,10 @@
 <div class="tracks-container" *ngIf="playlist">
-    <h2>{{ playlist.name }}</h2>
-    <p>{{ playlist.description }}</p>
-    <p><strong>Owner:</strong> {{ playlist.owner.display_name }}</p>
+    <div style="text-align: center;">
+      <img class="playlist-logo" [src]="playlist.images[0].url" *ngIf="playlist.images.length > 0">
+      <h2>{{ playlist.name }}</h2>
+      <p>{{ playlist.description }}</p>
+      <p><strong>Owner:</strong> {{ playlist.owner.display_name }}</p>
+    </div>
 
     <ul *ngIf="playlistTracks().length > 0; else noTracks">
         <li *ngFor="let track of playlistTracks()">

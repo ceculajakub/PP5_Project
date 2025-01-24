@@ -1,15 +1,16 @@
 import { Component, NgModule, OnInit, computed, inject, signal } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { SpotifyService } from '../../../core/services/spotify.service';
 import { PlaylistStore } from '../playlist.store';
 import { Playlist, Track } from '../../../core/services/models/models';
 import { FormsModule } from '@angular/forms';
 import { DisplayTracksComponent } from "../playlist/display-tracks/display-tracks.component";
+import { PlaylistCreateComponent } from "../playlist/playlist-create/playlist-create.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, FormsModule, DisplayTracksComponent],
+  imports: [NgFor, FormsModule, DisplayTracksComponent, PlaylistCreateComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [PlaylistStore],
@@ -21,24 +22,12 @@ export class HomeComponent {
   userPlaylists = computed(() => this.playlistStore.playlists());
   confirmingRemove: string | null = null;
   isAddingPlaylist = false; 
-  newPlaylistTitle = ''; 
-  newPlaylistDescription = '';
   selectedPlaylist: Playlist | null = null;
 
-  constructor()
-  {
+  constructor() {
     this.userLoggedIn.set(this.spotifyService.isLoggedIn());
-
-      this.playlistStore.fetchPlaylists();
+    this.playlistStore.fetchPlaylists();
   }
-
-  // ngOnInit(): void {
-  //   this.userLoggedIn.set(this.spotifyService.isLoggedIn());
-
-  //   if (this.userLoggedIn()) {
-  //     this.playlistStore.fetchPlaylists();
-  //   }
-  // }
 
   login(): void {
     const authUrl = this.spotifyService.getAuthUrl();
@@ -56,35 +45,11 @@ export class HomeComponent {
   
   cancelAddPlaylist(): void {
     this.isAddingPlaylist = false; 
-    this.newPlaylistTitle = ''; 
-    this.newPlaylistDescription = '';
   }
 
-  addPlaylist(): void {
-    if (this.newPlaylistTitle.trim() && this.newPlaylistDescription.trim()) {
-      const newPlaylist: Playlist = {
-        id: Date.now().toString(), 
-        name: this.newPlaylistTitle.trim(),
-        description: this.newPlaylistDescription.trim(),
-        images: [
-          {
-            url: 'https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjExMjQtMDQta3kzc2s5bXUuanBn.jpg',
-          },
-        ],
-        owner: {
-          display_name: 'You',
-        },
-        tracks: {
-          total: 0,
-          href: '',
-        },
-        external_urls: {
-          spotify: '',
-        },
-      };
-      this.playlistStore.addPlaylist(newPlaylist);
-      this.cancelAddPlaylist();
-    }
+  addPlaylist(newPlaylist: Playlist): void {
+    this.playlistStore.addPlaylist(newPlaylist);
+    this.cancelAddPlaylist();
   }
 
   modifyPlaylist(playlist: any): void {
@@ -114,7 +79,6 @@ export class HomeComponent {
 
   goBackToPlaylists(): void {
     this.selectedPlaylist = null;
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }
-
 }

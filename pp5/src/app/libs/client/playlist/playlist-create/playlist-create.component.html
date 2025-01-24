@@ -1,1 +1,17 @@
-<p>playlist-create works!</p>
+<div class="add-playlist-form">
+  <h3>Add New Playlist</h3>
+  <form (ngSubmit)="submitForm()">
+    <label>
+      Title:
+      <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
+    </label>
+    <label>
+      Description:
+      <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
+    </label>
+    <div class="form-actions">
+      <button type="submit">Add</button>
+      <button type="button" (click)="cancelForm()">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -13,6 +13,10 @@
     @if (!selectedPlaylist) {
       <div class="playlists-container responsive-playlists-container">
         <h2 class="responsive-heading">Your Playlists</h2>
+        <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()" class="responsive-button">Add Playlist</button>
+        <div *ngIf="isAddingPlaylist">
+          <app-playlist-create (addPlaylist)="addPlaylist($event)" (cancel)="cancelAddPlaylist()"></app-playlist-create>
+        </div>
         <ul class="responsive-list">
           <li *ngFor="let playlist of userPlaylists()" class="responsive-list-item">
             
@@ -40,28 +44,7 @@
             </div>
           </li>
         </ul>
-        @if (!isAddingPlaylist) {
-          <button (click)="showAddPlaylistForm()" class="responsive-button">Add Playlist</button>
-        }
-        @else {
-          <div class="add-playlist-form responsive-add-playlist-form">
-            <h3 class="responsive-subtitle">Add New Playlist</h3>
-            <form (ngSubmit)="addPlaylist()" class="responsive-form">
-              <label class="responsive-label">
-                Title:
-                <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required class="responsive-input"/>
-              </label>
-              <label class="responsive-label">
-                Description:
-                <textarea [(ngModel)]="newPlaylistDescription" name="description" required class="responsive-textarea"></textarea>
-              </label>
-              <div class="form-actions responsive-form-actions">
-                <button type="submit" class="responsive-button">Add</button>
-                <button type="button" (click)="cancelAddPlaylist()" class="responsive-button">Cancel</button>
-              </div>
-            </form>
-          </div>
-        }
+
       </div>
     }
     @if (selectedPlaylist) {

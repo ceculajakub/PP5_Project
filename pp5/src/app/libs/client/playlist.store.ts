@@ -24,13 +24,13 @@ export const PlaylistStore = signalStore(
   withMethods((store, service = inject(SpotifyService)) => ({
     setPlaylists: (playlists: []) => {
       patchState(store, { playlists });
-    },
-    addPlaylist: (newPlaylist: Playlist) => {
+        },
+        addPlaylist: (newPlaylist: Playlist) => {
       patchState(store, {
-        playlists: [...store.playlists(), newPlaylist],
+        playlists: [newPlaylist, ...store.playlists()],
       });
-    },
-    modifyPlaylist: (updatedPlaylist: Playlist) => {
+        },
+        modifyPlaylist: (updatedPlaylist: Playlist) => {
       patchState(store, {
         playlists: store.playlists().map((playlist) =>
           playlist.id === updatedPlaylist.id ? updatedPlaylist : playlist
