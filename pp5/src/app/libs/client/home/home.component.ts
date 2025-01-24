@@ -6,11 +6,12 @@ import { Playlist, Track } from '../../../core/services/models/models';
 import { FormsModule } from '@angular/forms';
 import { DisplayTracksComponent } from "../playlist/display-tracks/display-tracks.component";
 import { PlaylistCreateComponent } from "../playlist/playlist-create/playlist-create.component";
+import { PlaylistRemoveComponent } from "../playlist/playlist-remove/playlist-remove.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, FormsModule, DisplayTracksComponent, PlaylistCreateComponent, CommonModule],
+  imports: [NgFor, FormsModule, DisplayTracksComponent, PlaylistCreateComponent, PlaylistRemoveComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [PlaylistStore],
@@ -20,7 +21,7 @@ export class HomeComponent {
   private spotifyService = inject(SpotifyService);
   private playlistStore = inject(PlaylistStore);
   userPlaylists = computed(() => this.playlistStore.playlists());
-  confirmingRemove: string | null = null;
+  confirmingRemove: Playlist | null = null;
   isAddingPlaylist = false; 
   selectedPlaylist: Playlist | null = null;
 
@@ -60,17 +61,19 @@ export class HomeComponent {
     }
   }
 
-  askRemoveConfirmation(playlist: any): void {
-    this.confirmingRemove = playlist.id;
+  askRemoveConfirmation(playlist: Playlist): void {
+    this.confirmingRemove = playlist;
   }
 
   cancelRemove(): void {
     this.confirmingRemove = null;
   }
 
-  removePlaylist(playlist: any): void {
-    this.playlistStore.removePlaylist(playlist.id);
-    this.confirmingRemove = null;
+  removePlaylist(): void {
+    if (this.confirmingRemove) {
+      this.playlistStore.removePlaylist(this.confirmingRemove.id);
+      this.confirmingRemove = null;
+    }
   }
 
   viewTracklist(playlist: Playlist): void {

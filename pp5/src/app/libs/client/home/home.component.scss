@@ -1,12 +1,11 @@
 .home-container {
-  font-family: Arial, sans-serif;
-  color: #f5f5f5;
-  background-color: #333;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 70%;
   margin: 0 auto;
+  background-color: #333; 
+  padding: 20px; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px; 
 }
 
 .header {
@@ -34,20 +33,6 @@
   display: contents;
 }
 
-button {
-  background-color: #1db954;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #1ed760;
-}
-
 .main-content {
   h2 {
     margin-top: 0;
@@ -66,6 +51,7 @@ button:hover {
       border-radius: 8px;
       margin-bottom: 15px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
 
       img {
         width: 80px;
@@ -90,7 +76,6 @@ button:hover {
 .confirmation-box {
   position: absolute;
   background-color: #fff;
-  border: 1px solid #ccc;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 10px;
   border-radius: 5px;
@@ -121,10 +106,9 @@ button:hover {
 
 .add-playlist-form {
   margin-top: 20px;
-  padding: 15px;
-  border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #333;
+  background-color: #333; 
+  padding: 20px; 
 }
 
 .add-playlist-form h3 {
@@ -136,25 +120,10 @@ button:hover {
   margin-bottom: 10px;
 }
 
-.add-playlist-form input,
-.add-playlist-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
 .add-playlist-form .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-}
-
-.add-playlist-form button {
-  padding: 8px 12px;
 }
 
 .back-to-playlists-btn {
@@ -178,7 +147,6 @@ button:hover {
 @media (max-width: 600px) {
   .home-container {
     width: 100%;
-    padding: 10px;
   }
 
   .header {
@@ -205,15 +173,6 @@ button:hover {
           height: 60px;
         }
       }
-    }
-  }
-
-  .add-playlist-form {
-    padding: 10px;
-
-    input,
-    textarea {
-      font-size: 14px;
     }
   }
 
