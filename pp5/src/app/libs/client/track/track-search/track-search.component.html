@@ -1,1 +1,15 @@
-<p>track-search works!</p>
+<div class="track-search-container">
+  <h3>Search Tracks</h3>
+  <form (ngSubmit)="onSearchQueryChange()">
+    <input type="text" [(ngModel)]="searchQuery" name="searchQuery" placeholder="Enter track name" (input)="onSearchQueryChange()" required />
+    <button type="submit">Search</button>
+  </form>
+  <ul *ngIf="searchResults().length > 0">
+    <li *ngFor="let track of searchResults()">
+      <img [src]="track.album.images[0].url" [alt]="track.name" />
+      <p><strong>{{ track.name }}</strong> by {{ track.artists[0].name}}</p>
+      <a [href]="track.external_urls.spotify" target="_blank">▶</a>
+    </li>
+  </ul>
+  <p *ngIf="searchResults().length === 0 && searchQuery">No tracks found.</p>
+</div>
