@@ -1,36 +1,68 @@
-import { Component, NgModule, OnInit, computed, inject, signal } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+import {
+  Component,
+  NgModule,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { SpotifyService } from '../../../core/services/spotify.service';
-import { PlaylistStore } from './playlist.store';
+import { PlaylistStore } from '../playlist.store';
 import { Playlist, Track } from '../../../core/services/models/models';
 import { FormsModule } from '@angular/forms';
-import { DisplayTracksComponent } from "../playlist/display-tracks/display-tracks.component";
+import { DisplayTracksComponent } from '../playlist/display-tracks/display-tracks.component';
+import { PlaylistCreateComponent } from '../playlist/playlist-create/playlist-create.component';
+import { PlaylistRemoveComponent } from '../playlist/playlist-remove/playlist-remove.component';
+import { TrackSearchComponent } from '../track/track-search/track-search.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, NgIf, FormsModule, DisplayTracksComponent],
+  imports: [
+    NgFor,
+    FormsModule,
+    DisplayTracksComponent,
+    PlaylistCreateComponent,
+    PlaylistRemoveComponent,
+    CommonModule,
+    TrackSearchComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   providers: [PlaylistStore],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   userLoggedIn = signal<boolean>(false);
   private spotifyService = inject(SpotifyService);
   private playlistStore = inject(PlaylistStore);
-  userPlaylists = computed(() => this.playlistStore.playlists());
-  confirmingRemove: string | null = null;
-  isAddingPlaylist = false; 
-  newPlaylistTitle = ''; 
-  newPlaylistDescription = '';
+  userPlaylists = signal<Playlist[]>([]);
+  confirmingRemove: Playlist | null = null;
+  isAddingPlaylist = false;
   selectedPlaylist: Playlist | null = null;
+  hasSearchResults = signal<boolean>(false);
 
-  ngOnInit(): void {
+  constructor() {
     this.userLoggedIn.set(this.spotifyService.isLoggedIn());
+    console.log(this.userLoggedIn());
 
-    if (this.userLoggedIn()) {
-      this.playlistStore.fetchPlaylists();
-    }
+    effect(
+      () => {
+        if (this.userLoggedIn()) {
+          this.playlistStore.fetchPlaylists();
+        }
+      },
+      { allowSignalWrites: true }
+    );
+
+    effect(
+      () => {
+        const playlists = this.playlistStore.playlists();
+        this.userPlaylists.set(playlists);
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   login(): void {
@@ -44,61 +76,42 @@ export class HomeComponent implements OnInit {
   }
 
   showAddPlaylistForm(): void {
-    this.isAddingPlaylist = true; 
-  }
-  
-  cancelAddPlaylist(): void {
-    this.isAddingPlaylist = false; 
-    this.newPlaylistTitle = ''; 
-    this.newPlaylistDescription = '';
+    this.isAddingPlaylist = true;
   }
 
-  addPlaylist(): void {
-    if (this.newPlaylistTitle.trim() && this.newPlaylistDescription.trim()) {
-      const newPlaylist: Playlist = {
-        id: Date.now().toString(), // Unique ID using timestamp
-        name: this.newPlaylistTitle.trim(),
-        description: this.newPlaylistDescription.trim(),
-        images: [
-          {
-            url: 'https://via.placeholder.com/150', // Placeholder image
-          },
-        ],
-        owner: {
-          display_name: 'You', // Default to the current user
-        },
-        tracks: {
-          total: 0,
-          href: '', // Empty track list for new playlists
-        },
-        external_urls: {
-          spotify: '', // Empty Spotify URL for new playlists
-        },
-      };
-      this.playlistStore.addPlaylist(newPlaylist);
-      this.cancelAddPlaylist();
-    }
+  cancelAddPlaylist(): void {
+    this.isAddingPlaylist = false;
+  }
+
+  addPlaylist(newPlaylist: Playlist): void {
+    this.playlistStore.addPlaylist(newPlaylist);
+    this.cancelAddPlaylist();
   }
 
   modifyPlaylist(playlist: any): void {
-    const newName = window.prompt('Enter a new name for the playlist:', playlist.name);
+    const newName = window.prompt(
+      'Enter a new name for the playlist:',
+      playlist.name
+    );
     if (newName && newName.trim()) {
       const updatedPlaylist = { ...playlist, name: newName.trim() };
       this.playlistStore.modifyPlaylist(updatedPlaylist);
     }
   }
 
-  askRemoveConfirmation(playlist: any): void {
-    this.confirmingRemove = playlist.id;
+  askRemoveConfirmation(playlist: Playlist): void {
+    this.confirmingRemove = playlist;
   }
 
   cancelRemove(): void {
     this.confirmingRemove = null;
   }
 
-  removePlaylist(playlist: any): void {
-    this.playlistStore.removePlaylist(playlist.id);
-    this.confirmingRemove = null;
+  removePlaylist(): void {
+    if (this.confirmingRemove) {
+      this.playlistStore.removePlaylist(this.confirmingRemove.id);
+      this.confirmingRemove = null;
+    }
   }
 
   viewTracklist(playlist: Playlist): void {
@@ -107,7 +120,10 @@ export class HomeComponent implements OnInit {
 
   goBackToPlaylists(): void {
     this.selectedPlaylist = null;
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }
 
+  handleSearchResults(results: Track[]): void {
+    this.hasSearchResults.set(results.length > 0);
+  }
 }

@@ -1,10 +1,10 @@
 import { Inject, inject } from '@angular/core';
 import { signalStore, withMethods, withState, patchState } from '@ngrx/signals';
-import { Playlist, Track } from '../../../core/services/models/models';
+import { Playlist, Track } from '../../core/services/models/models';
 import { tap, exhaustMap, pipe } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { SpotifyService } from '../../../core/services/spotify.service';
+import { SpotifyService } from '../../core/services/spotify.service';
 
 export interface State {
     playlists: Playlist[];
@@ -24,13 +24,13 @@ export const PlaylistStore = signalStore(
   withMethods((store, service = inject(SpotifyService)) => ({
     setPlaylists: (playlists: []) => {
       patchState(store, { playlists });
-    },
-    addPlaylist: (newPlaylist: Playlist) => {
+        },
+        addPlaylist: (newPlaylist: Playlist) => {
       patchState(store, {
-        playlists: [...store.playlists(), newPlaylist],
+        playlists: [newPlaylist, ...store.playlists()],
       });
-    },
-    modifyPlaylist: (updatedPlaylist: Playlist) => {
+        },
+        modifyPlaylist: (updatedPlaylist: Playlist) => {
       patchState(store, {
         playlists: store.playlists().map((playlist) =>
           playlist.id === updatedPlaylist.id ? updatedPlaylist : playlist
@@ -41,6 +41,9 @@ export const PlaylistStore = signalStore(
       patchState(store, {
         playlists: store.playlists().filter((playlist) => playlist.id !== playlistId),
       });
+    },
+    clearTracks: () => {
+      patchState(store, { tracks: [] });
     },
     fetchPlaylists: rxMethod<void>(
       pipe(
@@ -53,7 +56,7 @@ export const PlaylistStore = signalStore(
                   playlists: response.items,
                   fetchStatus: 'success',
                 });
-                console.log(`after download ${store.playlists()}`)
+                console.log(`after download ${store.playlists()[0].images[0].url}`);
               },
               error: () => {
                 patchState(store, { fetchStatus: 'failed' });

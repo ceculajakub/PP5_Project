@@ -1,61 +1,48 @@
-<div class="home-container">
-  <header class="header">
-    <img src="https://plus.unsplash.com/premium_vector-1683141234968-b4f861c0546a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Logo" class="logo">
-    <h1 class="title">My Music App</h1>
-    @if (!userLoggedIn()) {
-      <button (click)="login()">Log In</button>
+<div class="home-container responsive-container">
+  <header class="header responsive-header">
+    <img src="https://plus.unsplash.com/premium_vector-1683141234968-b4f861c0546a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Logo" class="logo responsive-logo">
+    @if(!userLoggedIn())
+    {
+      <button (click)="login()" class="responsive-button">Log In</button>
     }
     @else {
-      <button (click)="logout()">Log Out</button>
+      <button (click)="logout()" class="responsive-button">Log Out</button>
     }
   </header>
-  <main class="main-content">
-    <div *ngIf="!selectedPlaylist" class="playlists-container">
-      <h2>Your Playlists</h2>
-      <ul>
-        <li *ngFor="let playlist of userPlaylists()" (click)="viewTracklist(playlist)">
-          <img [src]="playlist.images[0].url"/>
-          {{ playlist.name }}
-          <div class="playlist-actions">
-            <button (click)="modifyPlaylist(playlist)">Modify</button>
-            <div class="remove-confirmation-box" *ngIf="confirmingRemove === playlist.id">
-              <p>Are you sure?</p>
-              <button class="remove-confirmation-button" (click)="removePlaylist(playlist)">Yes</button>
-              <button class="remove-cancel-button" (click)="cancelRemove()">No</button>
+  <main class="main-content responsive-main-content">
+    <app-track-search (results)="handleSearchResults($event)"></app-track-search>
+
+    <div *ngIf="!selectedPlaylist">
+      <div class="playlists-container responsive-playlists-container">
+        <h2 class="responsive-heading">Your Playlists</h2>
+        <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()" class="responsive-button">Add Playlist</button>
+        <div *ngIf="isAddingPlaylist">
+          <app-playlist-create (addPlaylist)="addPlaylist($event)" (cancel)="cancelAddPlaylist()"></app-playlist-create>
+        </div>
+        <ul class="responsive-list">
+          <li *ngFor="let playlist of userPlaylists()" class="responsive-list-item">
+            <div class="playlist-content" (click)="viewTracklist(playlist)">
+              @if(playlist.images)
+              {
+                <img *ngIf="playlist.images.length > 0" [src]="playlist.images[0].url" class="responsive-image"/>
+              }
+              @else {
+                <img src="https://plus.unsplash.com/premium_vector-1683141234968-b4f861c0546a?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Playlist Image" class="responsive-image"/>
+              }
+              <h3 class="responsive-subtitle">{{ playlist.name }}</h3>
             </div>
-            <button *ngIf="confirmingRemove !== playlist.id" (click)="askRemoveConfirmation(playlist)">Remove</button>
-          </div>
-
-        </li>
-      </ul>
-
-      <button *ngIf="!isAddingPlaylist" (click)="showAddPlaylistForm()">Add Playlist</button>
-
-      <div *ngIf="isAddingPlaylist" class="add-playlist-form">
-        <h3>Add New Playlist</h3>
-        <form (ngSubmit)="addPlaylist()">
-          <label>
-            Title:
-            <input type="text" [(ngModel)]="newPlaylistTitle" name="title" required />
-          </label>
-          <label>
-            Description:
-            <textarea [(ngModel)]="newPlaylistDescription" name="description" required></textarea>
-          </label>
-          <div class="form-actions">
-            <button type="submit">Add</button>
-            <button type="button" (click)="cancelAddPlaylist()">Cancel</button>
-          </div>
-        </form>
+            <div class="playlist-actions responsive-playlist-actions">
+              <button (click)="modifyPlaylist(playlist)" class="responsive-button">Modify</button>
+              <button (click)="askRemoveConfirmation(playlist)" class="responsive-button">Remove</button>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
-    
-    <div>
-      <button class="back-to-playlists-btn" *ngIf="selectedPlaylist" (click)="goBackToPlaylists()">Back</button>
-      <app-display-tracks
-        *ngIf="selectedPlaylist"
-        [playlist]="selectedPlaylist">
-      </app-display-tracks>
+    <div *ngIf="selectedPlaylist">
+      <button class="back-to-playlists-btn responsive-button" (click)="goBackToPlaylists()">Back</button>
+      <app-display-tracks [playlist]="selectedPlaylist" class="responsive-app-display-tracks"></app-display-tracks>
     </div>
   </main>
+  <app-playlist-remove *ngIf="confirmingRemove" [playlistName]="confirmingRemove.name" (confirmRemove)="removePlaylist()" (cancelRemove)="cancelRemove()" class="modal-popup"></app-playlist-remove>
 </div>

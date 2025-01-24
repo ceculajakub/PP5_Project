@@ -40,7 +40,7 @@ export class SpotifyService {
 
   isLoggedIn() {
     const token = localStorage.getItem('access-token');
-    return !!token;
+    return token !== null;
   }
 
   async createPlaylist(userId: string, name: string, description: string) {
@@ -59,5 +59,7 @@ export class SpotifyService {
     return from(this.api.getPlaylistTracks(playlistId))
   }
 
-
+  searchTracks(query: string): any {
+    return from(this.api.searchTracks(query));
+  }
 }

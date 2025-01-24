@@ -14,6 +14,8 @@ export interface Playlist {
   description: string;
   images: {
     url: string;
+    height?: number;
+    width?: number;
   }[];
   owner: {
     display_name: string;

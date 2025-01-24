@@ -1,0 +1,31 @@
+@media (max-width: 600px) {
+  .playlist-create-container {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+.add-playlist-form {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #333; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.add-playlist-form h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.add-playlist-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.add-playlist-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
